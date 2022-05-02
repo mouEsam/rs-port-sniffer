@@ -8,7 +8,7 @@ use std::sync::mpsc::{Sender};
 #[derive(Debug)]
 pub enum SnifferError {
     NotEnoughArgs,
-    InvalidArgs(String),
+    InvalidArg(String),
     MissingArg(String),
     Help,
 }
@@ -17,7 +17,7 @@ impl Display for SnifferError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         return match self {
             SnifferError::NotEnoughArgs => f.write_str("Not enough arguments"),
-            SnifferError::InvalidArgs(arg) => {
+            SnifferError::InvalidArg(arg) => {
                 f.write_str(format!("Invalid argument: {}", arg).as_str())
             }
             SnifferError::MissingArg(arg) => {
@@ -61,7 +61,7 @@ impl Arguments {
                             if let Ok(threads) = threads.parse::<i32>() {
                                 num_threads = threads;
                             } else {
-                                return Err(SnifferError::InvalidArgs(threads.clone()));
+                                return Err(SnifferError::InvalidArg(threads.clone()));
                             }
                         } else {
                             return Err(SnifferError::MissingArg(first_arg.clone()));
@@ -69,11 +69,11 @@ impl Arguments {
                     }
                     other => {
                         if let Some(_) = ipaddr {
-                            return Err(SnifferError::InvalidArgs(other.to_owned()));
+                            return Err(SnifferError::InvalidArg(other.to_owned()));
                         } else if let Ok(ip) = IpAddr::from_str(other) {
                             ipaddr = Some(ip);
                         } else {
-                            return Err(SnifferError::InvalidArgs(other.to_owned()));
+                            return Err(SnifferError::InvalidArg(other.to_owned()));
                         }
                     }
                 }
