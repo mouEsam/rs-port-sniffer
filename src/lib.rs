@@ -39,7 +39,7 @@ impl Arguments {
             return Err(SnifferError::NotEnoughArgs);
         }
         let args = Vec::from(args);
-        let mut num_threads: i32 = 4;
+        let mut num_threads: i32 = 8;
         let mut ipaddr = Option::<IpAddr>::None;
         let mut iterator = args.iter();
 
@@ -48,7 +48,12 @@ impl Arguments {
             if let Some(first_arg) = first_arg {
                 match first_arg.as_str() {
                     "--help" | "-h" => {
-                        println!("Help");
+                        println!(
+                            "{}{}{}",
+                            "Usage:\n\r",
+                            "\t-j to select how many threads you want\n\r",
+                            "\t-h or -help to show this help message",
+                        );
                         return Err(SnifferError::Help);
                     }
                     "-j" => {
